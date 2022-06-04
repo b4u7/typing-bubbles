@@ -7,10 +7,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "prettier -c .",
-    "prettier-fix": "prettier -w ."
+    "lint": "stylelint ./src/styles/*.css",
+    "lint-fix": "stylelint ./src/styles/*.css --fix"
   },
-  "dependencies": {
+  "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
@@ -18,18 +18,19 @@
     "@types/node": "^16.11.34",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.6.4",
-    "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
     "autoprefixer": "^10.4.7",
     "postcss": "^8.4.13",
     "prettier": "2.6.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-scripts": "5.0.1",
+    "stylelint": "^14.8.5",
+    "stylelint-prettier": "^2.0.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-standard": "^25.0.0",
     "tailwindcss": "^3.0.24",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "web-vitals": "^2.1.4"
   },
   "eslintConfig": {
     "extends": [
