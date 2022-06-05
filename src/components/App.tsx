@@ -1,6 +1,7 @@
 import Bubble from './Bubble'
 import BubbleInput from './BubbleInput'
-import { useCallback, useReducer } from 'react'
+import { useCallback, useReducer, useRef } from 'react'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 enum ActionKind {
   Add = 'ADD',
@@ -31,6 +32,7 @@ function reducer(state: State, action: Action): State {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, [], undefined)
+  const nodeRef = useRef(null)
 
   const onSubmit = useCallback(
     (data: string) => {
@@ -38,7 +40,7 @@ function App() {
 
       setTimeout(() => {
         dispatch({ type: ActionKind.Remove })
-      }, 10000)
+      }, 2000)
     },
     [dispatch]
   )
@@ -47,11 +49,22 @@ function App() {
     <div className="h-screen w-screen">
       <div className="h-full container mx-auto">
         <div className="h-full py-4 space-y-4 overflow-hidden flex flex-col justify-end">
-          {state.map((item: string, index: number) => (
-            <Bubble key={`${item}-${index}`}>
-              <p>{item}</p>
-            </Bubble>
-          ))}
+          <TransitionGroup>
+            {state.map((item: string, index: number) => (
+              <CSSTransition
+                nodeRef={nodeRef}
+                appear={true}
+                key={`${item}-${index}`}
+                timeout={500}
+                classNames="fade"
+                unmountOnExit
+              >
+                <Bubble ref={nodeRef}>
+                  <p>{item}</p>
+                </Bubble>
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
           <BubbleInput onSubmit={onSubmit}></BubbleInput>
         </div>
       </div>

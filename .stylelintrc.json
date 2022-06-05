@@ -3,6 +3,7 @@
     "stylelint-prettier"
   ],
   "rules": {
+    "prettier/prettier": true,
     "at-rule-no-unknown": [
       true,
       {
@@ -11,7 +12,6 @@
         ]
       }
     ],
-    "number-leading-zero": "never",
-    "prettier/prettier": true
+    "number-leading-zero": "never"
   }
 }
