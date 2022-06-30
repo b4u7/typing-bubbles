@@ -3,23 +3,23 @@
   position: absolute;
   background-color: #ffffff;
   z-index: 0;
-  bottom: -.5rem;
+  bottom: -0.5rem;
   left: 0;
   width: 1rem;
   height: 1rem;
-  border-bottom-right-radius: .75rem;
+  border-bottom-right-radius: 0.75rem;
 }
 
 .bubble::after {
   content: '';
   position: absolute;
   z-index: 1;
-  bottom: -.5rem;
-  left: -.625rem;
+  bottom: -0.5rem;
+  left: -0.625rem;
   height: 1rem;
   width: 1rem;
   background-color: #22c55e;
-  border-bottom-right-radius: .625rem;
+  border-bottom-right-radius: 0.625rem;
 }
 
 .bubble-input {
