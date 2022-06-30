@@ -21,3 +21,9 @@
   background-color: #22c55e;
   border-bottom-right-radius: .625rem;
 }
+
+.bubble-input {
+  padding: 0;
+  margin: 0;
+  min-width: 4ch;
+}

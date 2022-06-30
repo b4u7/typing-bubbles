@@ -1,46 +1,62 @@
-import Bubble from './Bubble'
+import MotionBubble from './Bubble'
 import BubbleInput from './BubbleInput'
-import { useCallback, useReducer, useRef } from 'react'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { useCallback, useReducer } from 'react'
+import { AnimatePresence } from 'framer-motion'
 
 enum ActionKind {
   Add = 'ADD',
   Remove = 'REMOVE',
 }
 
-type Action = {
-  type: ActionKind
-  payload?: string
+type Payload = {
+  id: number
+  message: string
 }
 
-type State = string[]
+type Action = {
+  type: ActionKind
+  payload: Payload
+}
+
+type State = Map<number, string>
 
 function reducer(state: State, action: Action): State {
-  const { type, payload } = action
+  const {
+    type,
+    payload: { id, message },
+  } = action
 
   switch (type) {
     case ActionKind.Add:
-      return payload ? state.concat(payload) : state
+      return new Map(state).set(id, message)
 
     case ActionKind.Remove:
-      return state.slice(1)
+      const newState = new Map(state)
+      newState.delete(id)
 
-    default:
-      return state
+      return newState
   }
 }
 
+let currId = 0
+
 function App() {
-  const [state, dispatch] = useReducer(reducer, [], undefined)
-  const nodeRef = useRef(null)
+  const [state, dispatch] = useReducer(reducer, new Map(), undefined)
 
   const onSubmit = useCallback(
     (data: string) => {
-      dispatch({ type: ActionKind.Add, payload: data })
+      const payload = {
+        id: currId,
+        message: data,
+      }
+
+      dispatch({ type: ActionKind.Add, payload })
 
       setTimeout(() => {
-        dispatch({ type: ActionKind.Remove })
-      }, 2000)
+        dispatch({ type: ActionKind.Remove, payload })
+      }, 5000)
+
+      currId++
     },
     [dispatch]
   )
@@ -49,22 +65,18 @@ function App() {
     <div className="h-screen w-screen">
       <div className="h-full container mx-auto">
         <div className="h-full py-4 space-y-4 overflow-hidden flex flex-col justify-end">
-          <TransitionGroup>
-            {state.map((item: string, index: number) => (
-              <CSSTransition
-                nodeRef={nodeRef}
-                appear={true}
-                key={`${item}-${index}`}
-                timeout={500}
-                classNames="fade"
-                unmountOnExit
+          <AnimatePresence>
+            {Array.from(state.entries()).map(([id, item]) => (
+              <MotionBubble
+                key={id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                <Bubble ref={nodeRef}>
-                  <p>{item}</p>
-                </Bubble>
-              </CSSTransition>
+                <p>{item}</p>
+              </MotionBubble>
             ))}
-          </TransitionGroup>
+          </AnimatePresence>
           <BubbleInput onSubmit={onSubmit}></BubbleInput>
         </div>
       </div>

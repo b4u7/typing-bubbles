@@ -1,9 +1,11 @@
 import { useCallback, useRef, useState } from 'react'
-import Bubble from './Bubble'
+import MotionBubble from './Bubble'
 
 function BubbleInput({ onSubmit }: any) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [value, setValue] = useState('')
+
+  const [visible, setVisible] = useState(false)
 
   const handleChange = useCallback(
     ({ target: { value: newVal } }: any) => {
@@ -11,6 +13,10 @@ function BubbleInput({ onSubmit }: any) {
     },
     [setValue]
   )
+
+  const onKeyUp = useCallback(() => {
+    setVisible(value.length > 0)
+  }, [value, setVisible])
 
   const onKeyDown = useCallback(
     (event: any) => {
@@ -36,26 +42,26 @@ function BubbleInput({ onSubmit }: any) {
   }, [inputRef])
 
   return (
-    <Bubble hidden={!value.length}>
+    <MotionBubble
+      initial={{ opacity: 0 }}
+      animate={{ opacity: visible ? 1 : 0 }}
+      exit={{ opacity: 0 }}
+    >
       <input
         ref={inputRef}
         className={`${
           !value.length ? 'caret-transparent' : 'caret-slate-800'
-        } appearance-none outline-none bg-transparent `}
-        style={{
-          width: `${value.length}ch`,
-          minWidth: '4ch',
-          padding: '0',
-          margin: '0',
-        }}
+        } bubble-input appearance-none outline-none bg-transparent`}
+        style={{ width: `${value.length}ch` }}
         type="text"
         value={value}
         autoFocus
+        onKeyUp={onKeyUp}
         onKeyDown={onKeyDown}
         onChange={handleChange}
         onBlur={handleBlur}
       />
-    </Bubble>
+    </MotionBubble>
   )
 }
 

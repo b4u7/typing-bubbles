@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { forwardRef, ReactElement } from 'react'
 import '../styles/bubble.css'
 
@@ -9,12 +10,12 @@ type content = {
 const Bubble = forwardRef<HTMLDivElement, content>((props, ref) => (
   <div
     ref={ref}
-    className={`${
-      props.hidden ? 'opacity-0' : 'opacity-100'
-    } bubble bg-white relative w-fit text-slate-900 p-4 rounded-3xl transition dark:bg-slate-500 dark:text-slate-100`}
+    className="bubble bg-white relative w-fit text-slate-900 p-4 rounded-3xl dark:bg-slate-500 dark:text-slate-100"
   >
     {props.children}
   </div>
 ))
 
-export default Bubble
+const MotionBubble = motion(Bubble, { forwardMotionProps: true })
+
+export default MotionBubble
