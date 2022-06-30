@@ -1,0 +1,87 @@
+import MotionBubble from './Bubble'
+import BubbleInput from './BubbleInput'
+import { useCallback, useReducer } from 'react'
+import { AnimatePresence } from 'framer-motion'
+
+enum ActionKind {
+  Add = 'ADD',
+  Remove = 'REMOVE',
+}
+
+type Payload = {
+  id: number
+  message: string
+}
+
+type Action = {
+  type: ActionKind
+  payload: Payload
+}
+
+type State = Map<number, string>
+
+function reducer(state: State, action: Action): State {
+  const {
+    type,
+    payload: { id, message },
+  } = action
+
+  switch (type) {
+    case ActionKind.Add:
+      return new Map(state).set(id, message)
+
+    case ActionKind.Remove:
+      const newState = new Map(state)
+      newState.delete(id)
+
+      return newState
+  }
+}
+
+let currId = 0
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, new Map(), undefined)
+
+  const onSubmit = useCallback(
+    (data: string) => {
+      const payload = {
+        id: currId,
+        message: data,
+      }
+
+      dispatch({ type: ActionKind.Add, payload })
+
+      setTimeout(() => {
+        dispatch({ type: ActionKind.Remove, payload })
+      }, 5000)
+
+      currId++
+    },
+    [dispatch]
+  )
+
+  return (
+    <div className="h-screen w-screen">
+      <div className="h-full container mx-auto">
+        <div className="h-full py-4 space-y-4 overflow-hidden flex flex-col justify-end">
+          <AnimatePresence>
+            {Array.from(state.entries()).map(([id, item]) => (
+              <MotionBubble
+                key={id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <p>{item}</p>
+              </MotionBubble>
+            ))}
+          </AnimatePresence>
+          <BubbleInput onSubmit={onSubmit}></BubbleInput>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default App
