@@ -77,9 +77,7 @@ function App() {
                   classNames="fade"
                 >
                   <Bubble ref={bubbleRef}>
-                    <p>
-                      {item}, {id}
-                    </p>
+                    <p>{item}</p>
                   </Bubble>
                 </CSSTransition>
               )
