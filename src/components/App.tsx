@@ -1,7 +1,7 @@
-import MotionBubble from './Bubble'
+import Bubble from './Bubble'
 import BubbleInput from './BubbleInput'
-import { useCallback, useReducer } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { createRef, useCallback, useReducer } from 'react'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 enum ActionKind {
   Add = 'ADD',
@@ -65,18 +65,26 @@ function App() {
     <div className="h-screen w-screen">
       <div className="h-full container mx-auto">
         <div className="h-full py-4 space-y-4 overflow-hidden flex flex-col justify-end">
-          <AnimatePresence>
-            {Array.from(state.entries()).map(([id, item]) => (
-              <MotionBubble
-                key={id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <p>{item}</p>
-              </MotionBubble>
-            ))}
-          </AnimatePresence>
+          <TransitionGroup className="space-y-4">
+            {Array.from(state.entries()).map(([id, item]) => {
+              const bubbleRef = createRef<HTMLDivElement>()
+
+              return (
+                <CSSTransition
+                  key={id}
+                  nodeRef={bubbleRef}
+                  timeout={500}
+                  classNames="fade"
+                >
+                  <Bubble ref={bubbleRef}>
+                    <p>
+                      {item}, {id}
+                    </p>
+                  </Bubble>
+                </CSSTransition>
+              )
+            })}
+          </TransitionGroup>
           <BubbleInput onSubmit={onSubmit}></BubbleInput>
         </div>
       </div>

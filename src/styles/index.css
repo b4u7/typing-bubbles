@@ -3,20 +3,19 @@
 @tailwind utilities;
 
 .fade-enter {
-  background-color: red;
-  opacity: 0;
+    opacity: 0;
 }
 
 .fade-enter-active {
-  background-color: yellow;
-  opacity: 1;
+    opacity: 1;
+    transition: opacity 500ms ease-in;
 }
 
 .fade-exit {
-  opacity: 0;
+    opacity: 1;
 }
 
 .fade-exit-active {
-  background-color: blue;
-  opacity: 0;
+    opacity: 0;
+    transition: opacity 500ms ease-in;
 }
